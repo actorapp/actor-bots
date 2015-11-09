@@ -16,7 +16,7 @@ Framework includes:
 * Command parser
 * Parse.com helpers
 * Helpers for admin users of bot
-* BotFather implementation
+* [BotFather implementation](actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
 * Notification bot implementation
 * WebHooks support
 
