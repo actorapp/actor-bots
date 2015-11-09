@@ -6,18 +6,8 @@ interface I18NTrait {
     var language: String
     fun pickLocale(supported: Array<String>, usersLocales: Array<String>): String
     fun initLocalize(fileName: String)
+    fun initLocalize(name: String, supported: Array<String>, usersLocales: Array<String>)
     fun localized(key: String): String
-}
-
-fun I18NTrait.initLocalize(name: String, supported: Array<String>, usersLocales: Array<String>) {
-    val locale = pickLocale(supported, usersLocales)
-    if (locale == "en") {
-        language = "en"
-        initLocalize("$name.properties")
-    } else {
-        language = locale
-        initLocalize("${name}_${locale.capitalize()}.properties")
-    }
 }
 
 class I18NTraitImpl : I18NTrait {
@@ -38,6 +28,17 @@ class I18NTraitImpl : I18NTrait {
             }
         }
         return supported[0]
+    }
+
+    override fun initLocalize(name: String, supported: Array<String>, usersLocales: Array<String>) {
+        val locale = pickLocale(supported, usersLocales)
+        if (locale == "en") {
+            language = "en"
+            initLocalize("$name.properties")
+        } else {
+            language = locale
+            initLocalize("${name}_${locale.capitalize()}.properties")
+        }
     }
 
     override fun initLocalize(fileName: String) {
