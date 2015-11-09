@@ -7,8 +7,8 @@ fun main(args: Array<String>) {
         //
         // Use separate farms for production and development for easier deployment
         //
-        // bot(BotFatherBot::class) {
-        //     name = "botfather"
+        // bot(EchoBot::class) {
+        //     name = "echo"
         //     token = "<YOUR_TOKEN_HERE>"
         //     traceHook = "<OPTIONAL_TRACE_WEBHOOK>"
         // }
