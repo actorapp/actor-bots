@@ -18,6 +18,7 @@ Framework includes:
 * Helpers for admin users of bot
 * BotFather implementation
 * Notification bot implementation
+* WebHooks support
 
 # Getting Started
 
