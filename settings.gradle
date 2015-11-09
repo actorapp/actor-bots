@@ -1,0 +1,4 @@
+include 'actor-bots'
+include 'actor-bots-example'
+
+rootProject.name = 'actor-bots-platform'
