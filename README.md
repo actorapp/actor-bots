@@ -18,7 +18,7 @@ Framework includes:
 * Helpers for admin users of bot
 * [BotFather implementation](actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
 * Notification bot implementation
-* WebHooks support
+* [WebHooks support](docs/WebHooks.md)
 
 # Getting Started
 
