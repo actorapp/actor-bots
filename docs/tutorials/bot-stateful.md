@@ -92,6 +92,27 @@ oneShot("/weather") {
 }
 ```
 
+### Input state
+State for expecting user's input. Before entering state `before` closure is called. On any new message `validate` closure is called where you need to validate input for correctness and if you will return `true`, `received` closure is called.
+
+```kotlin
+expectInput("ask_name") {
+    before {
+        sendText("Please, enter your name")
+    }
+    received {
+        sendText("Thank you, $text")
+    }
+    validate {
+        if (!isText) {
+            sendText("Please, send text")
+            return@validate false
+        }
+        return@validate true
+    }
+}
+```
+
 ### Raw state
 This is state that doesn't have some specific behaviour. Before entering state `before` closure is executed and on any new message `receive` closure is executed.
 
