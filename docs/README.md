@@ -9,8 +9,8 @@
 
 ## Modules
 * [Bot API Module](api/API.md)
-* Server key-value storage. One for bot and for one for each fork. (can be accessed with scope)
-* Local key-value storage. Useful for keeping state of actor on disk.
+* Server key-value storage
+* Local key-value storage
 * Natural language processing with api.ai
 * [HTTP helpers](api/HTTP.md)
 * [i18n support](api/I18N.md)
