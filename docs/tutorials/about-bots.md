@@ -4,7 +4,7 @@ Actor Platform is named after Akka Actors. We like idea of Actors: autonomious i
 
 In future releases, we will use bots are extension mechanizm for server. For example, it is much easier to implement authentication module in bot than by hacking server.
 
-# Architecture
+## Architecture
 
 MagicRootBot is an entry point of building bots and consist consist of multiple internal actors:
 
@@ -17,9 +17,14 @@ MagicRootBot is an entry point of building bots and consist consist of multiple 
     * Conversation(GROUP_1236)
     * ...
 
-The most important one is conversation actors: this is bot developer's implementation of bots. They are subclasses of MagicBotFork.
-As you can see, we launch new instance for each conversation. This will help you not to share state of different conversations in one single bot instance. This Actors are created dynamically and not restored on bot restart. They are created right before processing first income message from conversation. If you want something more permanent for various tasks (for example: reminders), use [Overlords](Overlord.md).
+The most important one is conversation actors - subclasses of MagicBotFork - this is bot developer's implementation.
 
-[Overlord](Overlord.md) is an optional actor that receive information not connected to specific conversation. This actor, unlike conversation actors, always launched on bot startup. Keep all cross-conversation state in it.
+As you can see, we launch separate instance for each conversation. This will help you not to share state of different conversations in one single class. This Actors are created dynamically and not restored on bot restart. They are created right before processing first income message from conversation. If you want something more permanent(for example: reminders), you can use [Overlords](Overlord.md).
+
+[Overlord](Overlord.md) is an optional actor that receive information that is not connected to specific conversation. This actor, unlike conversation actors, always launched on bot startup. Keep all cross-conversation state in it.
 
 First two are root bots and not important for bot developer: they just hold everything together.
+
+## Next Step
+
+Building your first bot.
