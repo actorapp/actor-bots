@@ -1,6 +1,6 @@
 # Getting Started
 
-Actor Platform is named after Akka Actors. We like idea of Actors, this is autonomious pieces of software that can perform various actions have some internal state.
+Actor Platform is named after Akka Actors. We like idea of Actors, this is autonomious pieces of software that can perform various actions have some internal state. We treat bots in a such way as actors. They can talk not only with people, but also with each other even without human at all. You can think about Actor as just big event bus and every bot can receive and send data in reliable way from any part of the planet.
 
 # Magic Bot
 
