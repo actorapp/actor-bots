@@ -29,13 +29,17 @@ registerAiAgent("<agent_id>", "<agent_lang>", "<agent_key>")
 
 ### Performing AI query
 
-```fun aiQuery(agent: String, query: String): AiResponse?```
-With default agent: ```fun aiQuery(query: String): AiResponse?```
+```kotlin
+fun aiQuery(query: String): AiResponse?
+fun aiQuery(agent: String, query: String): AiResponse?
+```
 
 ### Query with closure
 
-```fun aiQuery(agent: String, query: String): AiResponse?```
-With default agent: ```fun aiQuery(query: String, closure: AiResponse.() -> Unit)```
+```kotlin
+fun aiQuery(query: String, closure: AiResponse.() -> Unit)
+fun aiQuery(agent: String, query: String, closure: AiResponse.() -> Unit)
+```
 
 Same as above, but provide nice syntax like:
 
