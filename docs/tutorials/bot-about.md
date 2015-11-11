@@ -31,4 +31,4 @@ First two are root bots and not important for bot developer: they just hold ever
 
 ## Next Step
 
-[Registering your first bot.](register-bot.md)
+[Registering your first bot](bot-register.md)
