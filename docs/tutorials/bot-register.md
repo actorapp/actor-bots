@@ -6,4 +6,4 @@ After registering new bot, you will get **AUTH_TOKEN** for your bot instance.
 
 ## Next Step
 
-Now you can start to implement your first bot.
+Now you can start to implement your [first bot](bot-implement.md).
