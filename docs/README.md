@@ -8,6 +8,7 @@
 * Message Types
 
 ## Modules
+* [Bot API Module](api/API.md)
 * Server key-value storage. One for bot and for one for each fork. (can be accessed with scope)
 * Local key-value storage. Useful for keeping state of actor on disk.
 * Natural language processing with api.ai
