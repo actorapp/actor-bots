@@ -1,6 +1,6 @@
 ## Guides
 * [About Bots](tutorials/about-bots.md)
-* Registering new bot
+* [Registering new bot](tutorials/register-bot.md)
 * Implementing bot
 * Running bots
 * Implementing Overlord
