@@ -24,3 +24,19 @@ Conversation(...) is an dynamically created actors for each conversation named "
 # Bot Farm
 
 To launch bots, you need to create farm and register all required information. Read more at [Farm page](Farm.md).
+
+# Modules
+
+Bots have various built-in modules for easier bot development.
+
+* Server key-value storage. One for bot and for one for each fork. (can be accessed with scope)
+* Local key-value storage. Useful for keeping state of actor on disk.
+* Natural language processing with api.ai
+* [HTTP helpers](docs/HTTP.md)
+* [i18n support](docs/I18N.md)
+* Command parser
+* Parse.com helpers
+* Helpers for admin users of bot
+* [BotFather implementation](actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
+* Notification bot implementation
+* [WebHooks support](docs/WebHooks.md)
