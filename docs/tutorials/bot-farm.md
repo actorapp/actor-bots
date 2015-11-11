@@ -12,7 +12,7 @@ This is an example of using farm with single ```EchoBot``` bot.
 
 `traceHook` - For debugging purpoises you can create group, generate integration web hook and write it here to receive all received/sent messages. WARRING: This is not secure and we recomend to do this only for debug.
 
-`overlord` - Optional class for [Overlord](Overlord.md)
+`overlord` - Optional class for [Overlord](bot-overlord.md)
 
 
 ```kotlin
