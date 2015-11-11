@@ -4,6 +4,7 @@
 * [Implementing bot](tutorials/bot-implement.md)
 * [Running bots](tutorials/bot-farm.md)
 * [Implementing Overlord](tutorials/bot-overlord.md)
+* [Working with incoming WebHooks](tutorial/web-hooks.md)
 
 ## Modules
 * Server key-value storage. One for bot and for one for each fork. (can be accessed with scope)
@@ -15,7 +16,6 @@
 * Parse.com helpers
 * Helpers for admin users of bot
 * Notification bot implementation
-* [WebHooks support](api/WebHooks.md)
 
 ## Examples
 * [BotFather Implementation](../actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
