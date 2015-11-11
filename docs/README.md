@@ -2,7 +2,7 @@
 * [About Bots](tutorials/about-bots.md)
 * [Registering new bot](tutorials/register-bot.md)
 * [Implementing bot](tutorials/bot-implement.md)
-* Running bots
+* [Running bots](tutorials/Farm.md)
 * Implementing Overlord
 
 ## Modules
