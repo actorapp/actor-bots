@@ -5,7 +5,7 @@ We use this language because of it's ability to make languages with static typin
 
 # Getting Started
 
-For getting started visit [documentation page](doc/GettingStarted.md).
+For getting started visit [documentation page](docs/GettingStarted.md).
 
 # Modules
 
