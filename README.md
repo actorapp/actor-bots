@@ -1,7 +1,6 @@
 # Actor Messenger Bot Platform
 
-Entry point for programming useful bots. All bots are written in Kotlin, JVM-based language that is often called "lightweight scala".
-We use this language because of it's ability to make languages with static typing.
+Actor Bot platfrom allows you implement your own bots for Actor with various modules that helps you easier integrate with external services, store bot's state in built-in key-value storage or even implement your Siri-like bot with api.api integration. It is based on [Kotlin language](https://kotlinlang.com).
 
 ## Getting Started
 
