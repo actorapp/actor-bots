@@ -9,6 +9,8 @@ For getting started visit [documentation page](doc/GettingStarted.md).
 
 # Modules
 
+Actor Bots have various built-in modules for easier bot development.
+
 * Server key-value storage. One for bot and for one for each fork. (can be accessed with scope)
 * Local key-value storage. Useful for keeping state of actor on disk.
 * Natural language processing with api.ai
@@ -20,6 +22,10 @@ For getting started visit [documentation page](doc/GettingStarted.md).
 * [BotFather implementation](actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
 * Notification bot implementation
 * [WebHooks support](docs/WebHooks.md)
+
+# Community
+
+You reach Actor community in our [Actor Open Source group](https://actor.im/oss).
 
 # License
 
