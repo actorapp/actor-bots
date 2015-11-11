@@ -23,4 +23,4 @@ That's all!
 
 ## Next Step
 
-Now you can run your first bot.
+Now you can [run](bot-farm.md) your first bot.
