@@ -9,7 +9,7 @@
 
 ## Modules
 * [Bot API Module](api/API.md)
-* Server key-value storage
+* [Server key-value storage](api/server-key-value.md)
 * Local key-value storage
 * Natural language processing with api.ai
 * [HTTP helpers](api/HTTP.md)
