@@ -9,8 +9,8 @@
 
 ## Modules
 * [Bot API Module](api/API.md)
-* [Server key-value storage](api/server-key-value.md)
-* Local key-value storage
+* [Server key-value storage](api/key-value-server.md)
+* [Local key-value storage](api/key-value-local.md)
 * [Natural language processing with api.ai](api/ai.md)
 * [HTTP helpers](api/HTTP.md)
 * [i18n support](api/I18N.md)
