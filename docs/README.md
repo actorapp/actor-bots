@@ -14,7 +14,7 @@
 * [Natural language processing with api.ai](api/ai.md)
 * [HTTP helpers](api/HTTP.md)
 * [i18n support](api/I18N.md)
-* Helpers for admin users of bot
+* [Helpers for admin users of bot](api/admin.md)
 
 ## Examples
 * [BotFather Implementation](../actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
