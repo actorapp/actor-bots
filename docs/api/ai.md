@@ -15,6 +15,32 @@ interface AiTrait {
 }
 ```
 
+## Query Response
+
+```kotlin
+class AiResponse {
+    val raw: JSONObject
+    val action: String
+    val speech: String?
+
+    val pQuery: String?
+    val pSimplified: String?
+    val pRequestType: String?
+    val pSummary: String?
+    val pTime: Date?
+}
+```
+
+`raw` - Raw Response from API.AI
+`action` - Recognized action name
+`speech` - Suggested text response
+
+`pQuery` - query parameter for some actions (like searching on the web)
+`pSimplified` - simplified input string. For example, "hi", "hello", "nice to meet you!" will be simplified to "hello"
+`pRequestType` - type of request (domain or agent)
+`pSummary` - summary of input string
+`pTime` - recognized time
+
 ## Configuration
 
 Before using ai methods you need to provide subscription key and register your agents.
