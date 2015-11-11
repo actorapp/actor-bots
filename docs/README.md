@@ -11,7 +11,7 @@
 * [Bot API Module](api/API.md)
 * [Server key-value storage](api/server-key-value.md)
 * Local key-value storage
-* Natural language processing with api.ai
+* [Natural language processing with api.ai](api/ai.md)
 * [HTTP helpers](api/HTTP.md)
 * [i18n support](api/I18N.md)
 * Helpers for admin users of bot
