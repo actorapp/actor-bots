@@ -4,6 +4,7 @@
 * [Implementing bot](tutorials/bot-implement.md)
 * [Running bots](tutorials/bot-farm.md)
 * [Persistent Bot](tutorials/bot-persistent.md)
+* [Stateful Bot](tutorials/bot-stateful.md)
 * [Implementing Overlord](tutorials/bot-overlord.md)
 * [Incoming WebHooks](tutorials/web-hooks.md)
 * [Message Types](tutorials/bot-messages.md)
