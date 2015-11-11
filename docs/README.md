@@ -13,9 +13,7 @@
 * Natural language processing with api.ai
 * [HTTP helpers](api/HTTP.md)
 * [i18n support](api/I18N.md)
-* Parse.com helpers
 * Helpers for admin users of bot
-* Notification bot implementation
 
 ## Examples
 * [BotFather Implementation](../actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
