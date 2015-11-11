@@ -7,9 +7,13 @@ Farm is an entry point for launching your bots. Each application can have only o
 This is an example of using farm with single ```EchoBot``` bot.
 
 `name` - unique name for a bot, lowcase latin/numbers are recomended.
+
 `token` - access token for your bot, generated with BotFather.
+
 `traceHook` - For debugging purpoises you can create group, generate integration web hook and write it here to receive all received/sent messages. WARRING: This is not secure and we recomend to do this only for debug.
+
 `overlord` - Optional class for [Overlord](Overlord.md)
+
 
 ```kotlin
 import im.actor.bots.framework.farm
