@@ -27,4 +27,4 @@ First two are root bots and not important for bot developer: they just hold ever
 
 ## Next Step
 
-Building your first bot.
+[Registering your first bot.](register-bot.md)
