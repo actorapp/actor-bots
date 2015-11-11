@@ -1,3 +1,6 @@
+## Recomendation
+We recommend you to read all guides one by one until you finish [Stateful Bot](tutorials/bot-stateful.md), most important one.
+
 ## Guides
 * [About Bots](tutorials/bot-about.md)
 * [Registering new bot](tutorials/bot-register.md)
