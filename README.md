@@ -6,6 +6,33 @@ Actor Bot platfrom allows you implement your own bots for Actor with various mod
 
 All documentation and tutorials are at [docs](docs) directory.
 
+## Example Bot
+
+```kotlin
+
+import im.actor.bots.framework.*
+
+class EchoBot(scope: MagicForkScope) : MagicBotFork(scope) {
+
+    override fun onMessage(message: MagicBotMessage) {
+        when (message) {
+            is MagicBotTextMessage -> {
+                sendText("Received: ${message.text}")
+            }
+        }
+    }
+}
+
+fun main(args: Array<String>) {
+    farm("BotFarm") {
+        bot(EchoBot::class) {
+             name = "echo"
+             token = "<YOUR_TOKEN_HERE>"
+        }
+    }
+}
+```
+
 ## Community
 
 You reach Actor community in our [Actor Open Source group](https://actor.im/oss).
