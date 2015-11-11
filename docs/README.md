@@ -3,7 +3,7 @@
 * [Registering new bot](tutorials/bot-register.md)
 * [Implementing bot](tutorials/bot-implement.md)
 * [Running bots](tutorials/bot-farm.md)
-* [Save and Restore bot's data with Persistent Bot](tutorials/bot-persistent.md)
+* [Persistent Bot](tutorials/bot-persistent.md)
 * [Implementing Overlord](tutorials/bot-overlord.md)
 * [Incoming WebHooks](tutorials/web-hooks.md)
 * [Message Types](tutorials/bot-messages.md)
