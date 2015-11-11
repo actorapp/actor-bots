@@ -6,9 +6,9 @@ Bot's usually have some state. For example, waiting for user command, or expecti
 
 When you subclass from `MagicStatefulBot` you need to implement `fun configure()` method and in it you need to define all bot's states. States are not dynamicaly created at runtime, it is static tree of states.
 
-Different type of states have different configuration.
+Every state have name and full name is formed by contagenating all parents state names with dots. State can easily goto any other state by it's name with `goto`, `tryGoto` and `gotoParent` methods. State names passed to this methods can be either short or full. If you will pass short state name, method will state lookup in all descendance states and it's childs for approriate state. 
 
-Root state is state that expects slash-commands from user.
+Root state is state that expects slash-commands from user and named "main". When you need to go to root state, you can simply call `goto("main")`.
 
 ## Example
 
