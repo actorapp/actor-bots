@@ -5,7 +5,7 @@
 * [Running bots](tutorials/bot-farm.md)
 * [Implementing Overlord](tutorials/bot-overlord.md)
 * [Incoming WebHooks](tutorials/web-hooks.md)
-* Message Types
+* [Message Types](tutorials/bot-messages.md)
 
 ## Modules
 * [Bot API Module](api/API.md)
