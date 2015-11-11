@@ -1,9 +1,11 @@
 ## Guides
-* [About Bots](tutorials/about-bots.md)
-* [Registering new bot](tutorials/register-bot.md)
+* [About Bots](tutorials/bot-about.md)
+* [Registering new bot](tutorials/bot-register.md)
 * [Implementing bot](tutorials/bot-implement.md)
 * [Running bots](tutorials/bot-farm.md)
-* Implementing Overlord
+* [Implementing Overlord](tutorials/bot-overlord.md)
+* [Incoming WebHooks](tutorials/web-hooks.md)
+* Message Types
 
 ## Modules
 * Server key-value storage. One for bot and for one for each fork. (can be accessed with scope)
@@ -11,11 +13,7 @@
 * Natural language processing with api.ai
 * [HTTP helpers](api/HTTP.md)
 * [i18n support](api/I18N.md)
-* Command parser
-* Parse.com helpers
 * Helpers for admin users of bot
-* Notification bot implementation
-* [WebHooks support](api/WebHooks.md)
 
 ## Examples
 * [BotFather Implementation](../actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
