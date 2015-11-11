@@ -15,6 +15,32 @@ interface AiTrait {
 }
 ```
 
+## Query Response
+
+```kotlin
+class AiResponse {
+    val raw: JSONObject
+    val action: String
+    val speech: String?
+
+    val pQuery: String?
+    val pSimplified: String?
+    val pRequestType: String?
+    val pSummary: String?
+    val pTime: Date?
+}
+```
+
+`raw` - Raw Response from API.AI
+`action` - Recognized action name
+`speech` - Suggested text response
+
+`pQuery` - query parameter for some actions (like searching on the web)
+`pSimplified` - simplified input string. For example, "hi", "hello", "nice to meet you!" will be simplified to "hello"
+`pRequestType` - type of request (domain or agent)
+`pSummary` - summary of input string
+`pTime` - recognized time
+
 ## Configuration
 
 Before using ai methods you need to provide subscription key and register your agents.
@@ -29,13 +55,17 @@ registerAiAgent("<agent_id>", "<agent_lang>", "<agent_key>")
 
 ### Performing AI query
 
-```fun aiQuery(agent: String, query: String): AiResponse?```
-With default agent: ```fun aiQuery(query: String): AiResponse?```
+```kotlin
+fun aiQuery(query: String): AiResponse?
+fun aiQuery(agent: String, query: String): AiResponse?
+```
 
 ### Query with closure
 
-```fun aiQuery(agent: String, query: String): AiResponse?```
-With default agent: ```fun aiQuery(query: String, closure: AiResponse.() -> Unit)```
+```kotlin
+fun aiQuery(query: String, closure: AiResponse.() -> Unit)
+fun aiQuery(agent: String, query: String, closure: AiResponse.() -> Unit)
+```
 
 Same as above, but provide nice syntax like:
 
