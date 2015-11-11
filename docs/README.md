@@ -32,11 +32,11 @@ Bots have various built-in modules for easier bot development.
 * Server key-value storage. One for bot and for one for each fork. (can be accessed with scope)
 * Local key-value storage. Useful for keeping state of actor on disk.
 * Natural language processing with api.ai
-* [HTTP helpers](docs/HTTP.md)
-* [i18n support](docs/I18N.md)
+* [HTTP helpers](api/HTTP.md)
+* [i18n support](api/I18N.md)
 * Command parser
 * Parse.com helpers
 * Helpers for admin users of bot
-* [BotFather implementation](actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
+* [BotFather implementation](../actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
 * Notification bot implementation
-* [WebHooks support](docs/WebHooks.md)
+* [WebHooks support](api/WebHooks.md)
