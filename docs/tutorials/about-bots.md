@@ -4,6 +4,10 @@ Actor Platform is named after Akka Actors. We like idea of Actors: autonomious i
 
 In future releases, we will use bots are extension mechanizm for server. For example, it is much easier to implement authentication module in bot than by hacking server.
 
+## Before Begin
+
+Before begining we recomend to read about [Kotlin Language](https://kotlinlang.org). This is very easy to study language and if you are familiar with Java, you will learn it in a day.
+
 ## Architecture
 
 MagicRootBot is an entry point of building bots and consist consist of multiple internal actors:
