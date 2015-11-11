@@ -18,4 +18,5 @@
 * [WebHooks support](api/WebHooks.md)
 
 ## Examples
-* [BotFather implementation](../actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
+* [BotFather Implementation](../actor-bots/src/main/java/im/actor/bots/embedded/BotFather.kt)
+* [Notification bot with Overlord](../actor-bots/src/main/java/im/actor/bots/blocks/Notification.kt)
