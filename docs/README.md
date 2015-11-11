@@ -1,5 +1,5 @@
 ## Guides
-* Bots intro
+* [About Bots](tutorials/about-bots.md)
 * Registering new bot
 * Implementing bot
 * Running bots
