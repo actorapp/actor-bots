@@ -1,9 +1,9 @@
 ## Guides
-* [About Bots](tutorials/about-bots.md)
-* [Registering new bot](tutorials/register-bot.md)
+* [About Bots](tutorials/bot-about.md)
+* [Registering new bot](tutorials/bot-register.md)
 * [Implementing bot](tutorials/bot-implement.md)
 * [Running bots](tutorials/bot-farm.md)
-* Implementing Overlord
+* [Implementing Overlord](tutorials/bot-overlord.md)
 
 ## Modules
 * Server key-value storage. One for bot and for one for each fork. (can be accessed with scope)
