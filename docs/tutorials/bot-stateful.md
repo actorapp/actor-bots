@@ -10,6 +10,10 @@ Every state have name and full name is formed by contagenating all parents state
 
 Root state is state that expects slash-commands from user and named "main". When you need to go to root state, you can simply call `goto("main")`.
 
+## Persistent
+
+Stateful Bot can persist it's state automatically. You can enable it feature by simply calling `enablePersistent = false` in the begining of your `configure` method.
+
 ## Example
 
 ```kotlin
