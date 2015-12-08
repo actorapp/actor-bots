@@ -1,4 +1,18 @@
-# Actor Messenger Bot Platform
+<h3 align="center">
+  <a href="https://github.com/actorapp/actor-platform">
+    <img src="docs/assets/Actor_Logo.png" width="150" />
+    <br />
+    Actor
+  </a>
+</h3>
+<p align="center">
+  <a href="https://github.com/actorapp/actor-platform">Platform</a> &bull; 
+  <a href="https://github.com/actorapp/actor-bootstrap">Bootstrap</a> &bull; 
+  Bots
+</p>
+-------
+
+# Actor Bot Platform
 
 Actor Bot platfrom allows you implement your own bots for Actor with various modules that helps you easier integrate with external services, store bot's state in built-in key-value storage or even implement your Siri-like bot with [api.api](https://api.ai/) integration. It is based on [Kotlin language](https://kotlinlang.org).
 
