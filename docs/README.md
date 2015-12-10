@@ -1,5 +1,5 @@
 ## Recomendation
-We recommend you to read all guides one by one until you finish [Stateful Bot](tutorials/bot-stateful.md), most important one.
+We recommend you to read all guides one by one until you finish [Stateful Bot](tutorials/bot-stateful.md), the most important one.
 
 ## Guides
 * [About Bots](tutorials/bot-about.md)
