@@ -7,24 +7,29 @@ import org.json.JSONObject
 // Magic Bot Messages
 //
 
-public abstract class MagicBotMessage(val peer: BotMessages.OutPeer, val sender: BotMessages.UserOutPeer,
+public abstract class MagicBotMessage(val peer: OutPeer, val sender: BotMessages.UserOutPeer?,
                                       val rid: Long) {
 
 }
 
-public class MagicBotTextMessage(peer: BotMessages.OutPeer, sender: BotMessages.UserOutPeer, rid: Long,
+public class MagicBotTextMessage(peer: OutPeer, sender: BotMessages.UserOutPeer?, rid: Long,
                                  val text: String) : MagicBotMessage(peer, sender, rid) {
     var command: String? = null
     var commandArgs: String? = null
 }
 
-public class MagicBotJsonMessage(peer: BotMessages.OutPeer, sender: BotMessages.UserOutPeer, rid: Long,
+public class MagicBotJsonMessage(peer: OutPeer, sender: BotMessages.UserOutPeer?, rid: Long,
                                  val json: JSONObject) : MagicBotMessage(peer, sender, rid) {
 
 }
 
-public class MagicBotDocMessage(peer: BotMessages.OutPeer, sender: BotMessages.UserOutPeer, rid: Long,
+public class MagicBotDocMessage(peer: OutPeer, sender: BotMessages.UserOutPeer?, rid: Long,
                                 val doc: BotMessages.DocumentMessage) : MagicBotMessage(peer, sender, rid) {
+
+}
+
+public class MagicBotStickerMessage(peer: OutPeer, sender: BotMessages.UserOutPeer?, rid: Long,
+                                    val sticker: BotMessages.StickerMessage) : MagicBotMessage(peer, sender, rid) {
 
 }
 
@@ -184,6 +189,10 @@ public class OutPeer(val type: PeerType, val id: Int, val accessHash: Long) {
             }
         }
         return res
+    }
+
+    fun toPeer(): Peer {
+        return Peer(type, id)
     }
 
     fun toKit(): BotMessages.OutPeer {

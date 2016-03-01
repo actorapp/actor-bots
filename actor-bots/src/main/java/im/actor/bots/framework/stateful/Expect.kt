@@ -1,10 +1,8 @@
 package im.actor.bots.framework.stateful
 
 import im.actor.bots.BotMessages
-import im.actor.bots.framework.MagicBotDocMessage
-import im.actor.bots.framework.MagicBotJsonMessage
-import im.actor.bots.framework.MagicBotMessage
-import im.actor.bots.framework.MagicBotTextMessage
+import im.actor.bots.framework.*
+import im.actor.bots.framework.traits.ModernMessage
 import org.json.JSONObject
 import java.util.*
 
@@ -67,6 +65,8 @@ interface ExpectContext {
     fun gotoParent()
     fun log(text: String)
     fun sendText(text: String)
+    fun sendJson(dataType: String, json: JSONObject)
+    fun sendModernText(message: ModernMessage)
 }
 
 interface ExpectContainer {
@@ -122,6 +122,17 @@ var ExpectContext.command: String?
 
     }
 
+var ExpectContext.commandArgs: String?
+    get() {
+        if (body is MagicBotTextMessage) {
+            return (body as MagicBotTextMessage).commandArgs
+        }
+        return null
+    }
+    private set(v) {
+
+    }
+
 var ExpectContext.isCancel: Boolean
     get() {
         return isCommand && command == "cancel"
@@ -148,6 +159,27 @@ var ExpectContext.doc: BotMessages.DocumentMessage
     private set(v) {
 
     }
+
+
+var ExpectContext.isSticker: Boolean
+    get() {
+        return body is MagicBotStickerMessage
+    }
+    private set(v) {
+
+    }
+
+var ExpectContext.sticker: BotMessages.StickerMessage
+    get() {
+        if (body is MagicBotStickerMessage) {
+            return (body as MagicBotStickerMessage).sticker
+        }
+        throw RuntimeException()
+    }
+    private set(v) {
+
+    }
+
 
 var ExpectContext.isPhoto: Boolean
     get() {

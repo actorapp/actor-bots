@@ -10,14 +10,15 @@ import im.actor.bots.framework.parser.ParsedMessage
 import im.actor.bots.framework.persistence.ServerKeyValue
 import im.actor.bots.framework.traits.*
 import org.json.JSONObject
+import scala.Option
 import scala.concurrent.Future
 import java.util.*
 
 /**
  * Configuration of Bot
  * @param name Unique name of Bot
- * @param clazz Class of bot
- * @param overlordClazz Optional class of bot's overlord
+ * @param clazz Class of bots
+ * @param overlordClazz Optional class of bots's overlord
  * @param token Bot's token in Actor Platform
  * @param endpoint Bot's API Endpoint
  * @param traceHook Optional WebHook for logging
@@ -32,18 +33,18 @@ class MagicBotConfig(val name: String,
 }
 
 /**
- * Bot's Scope: Context information for bot
- * @param name Unique name of bot
+ * Bot's Scope: Context information for bots
+ * @param name Unique name of bots
  * @param peer Fork's peer
  * @param sender Sender of message
  * @param bot Magical Remote Bot, required to make requests
  * @param forkKeyValue Fork's key-value. Useful for storing conversation state.
- * @param botKeyValue All bot's key value. Useful for storing bot's state.
+ * @param botKeyValue All bots's key value. Useful for storing bots's state.
  * @param overlord Optional Overlord's actor ref
  */
 class MagicForkScope(val name: String,
                      var peer: OutPeer,
-                     var sender: BotMessages.User,
+                     var sender: BotMessages.User?,
                      val bot: MagicalRemoteBot,
                      val forkKeyValue: ServerKeyValue,
                      val botKeyValue: ServerKeyValue,
@@ -56,14 +57,16 @@ class MagicForkScope(val name: String,
  * @param bot Magical Remote Bot, required to make requests
  */
 class MagicOverlordScope(val botKeyValue: ServerKeyValue,
+                         val rootRef: ActorRef,
                          val bot: MagicalRemoteBot)
 
 /**
  * Magical Remote Bot
- * @param config Configuration for bot
+ * @param config Configuration for bots
  */
 open class MagicalRemoteBot(val config: MagicBotConfig) :
         HTTPTrait by HTTPTraitImpl(),
+        BugSnag by BugSnagImpl(),
         RemoteBot(config.token, config.endpoint) {
 
     private var child: ActorRef? = null
@@ -113,16 +116,23 @@ open class MagicalRemoteBot(val config: MagicBotConfig) :
 
     private fun trace(msg: String) {
         if (config.traceHook != null) {
-            urlPostJson(config.traceHook, JSONObject().apply {
+            urlPostJson(config.traceHook, Json.JsonObject(JSONObject().apply {
                 put("text", msg)
-            })
+            }))
         }
+    }
+
+    override fun preRestart(reason: Throwable?, message: Option<Any>?) {
+        super.preRestart(reason, message)
+
+        logException(reason)
     }
 
     /**
      * Child Bot to avoid dead locks in RPC requests
      */
     class MagicChildBot(val bot: MagicalRemoteBot, val config: MagicBotConfig) :
+            BugSnag by BugSnagImpl(),
             UntypedActor() {
 
         /**
@@ -131,7 +141,7 @@ open class MagicalRemoteBot(val config: MagicBotConfig) :
         private var botKeyValue = ServerKeyValue(bot)
 
         /**
-         * Overlord for bot
+         * Overlord for bots
          */
         private var overlord: ActorRef? = null
 
@@ -139,7 +149,7 @@ open class MagicalRemoteBot(val config: MagicBotConfig) :
             super.preStart()
 
             if (config.overlordClazz != null) {
-                overlord = context().actorOf(Props.create(config.overlordClazz, MagicOverlordScope(botKeyValue, bot)), "overlord")
+                overlord = context().actorOf(Props.create(config.overlordClazz, MagicOverlordScope(botKeyValue, self(), bot)), "overlord")
             }
         }
 
@@ -149,10 +159,13 @@ open class MagicalRemoteBot(val config: MagicBotConfig) :
         final override fun onReceive(message: Any?) {
             when (message) {
                 is BotMessages.Message -> {
-                    peerActor(message.peer(), message.sender()).tell(message, self())
+                    peerActor(message.peer().toUsable(), message.sender()).tell(message, self())
                 }
                 is BotMessages.RawUpdate -> {
                     overlord?.tell(message, self())
+                }
+                is OverlordMessage -> {
+                    peerActor(message.peer, null).tell(message, self())
                 }
             }
         }
@@ -160,19 +173,27 @@ open class MagicalRemoteBot(val config: MagicBotConfig) :
         /**
          * Building peer's Actor
          */
-        fun peerActor(peer: BotMessages.OutPeer, sender: BotMessages.UserOutPeer): ActorRef {
-            val peerId = (if (peer.isPrivate) "PRIVATE" else "GROUP") + "_" + peer.id()
+        fun peerActor(peer: OutPeer, sender: BotMessages.UserOutPeer?): ActorRef {
+            val peerId = peer.toUniqueId()
             val cached = context().child(peerId)
             if (cached.nonEmpty()) {
                 return cached.get()
             } else {
-                val scope = MagicForkScope(bot.config.name, peer.toUsable(), bot.getUser(sender.id()), bot,
+                val scope = MagicForkScope(bot.config.name, peer, if (sender != null) bot.getUser(sender.id()) else null, bot,
                         ServerKeyValue(bot, "peer_$peerId"), botKeyValue, overlord)
                 return context().actorOf(Props.create(bot.config.clazz, scope), peerId)
             }
         }
+
+        override fun preRestart(reason: Throwable?, message: Option<Any>?) {
+            super.preRestart(reason, message)
+
+            logException(reason)
+        }
     }
 }
+
+private data class OverlordMessage(val peer: OutPeer, val message: Any)
 
 /**
  * Main Magic Bot
@@ -183,11 +204,13 @@ abstract class MagicBotFork(val scope: MagicForkScope) :
         I18NTrait by I18NTraitImpl(),
         LogTrait by LogTraitImpl(),
         APITraitScoped by APITraitScopedImpl(scope.peer, scope.bot),
-        AdminTrait by AdminTraitImpl(),
+        AdminTraitScoped by AdminTraitScopedImpl(scope),
+        DispatchTrait by DispatchTraitImpl(),
+        BugSnag by BugSnagImpl(),
         UntypedActor() {
 
     /**
-     * Enable bot handling in groups.
+     * Enable bots handling in groups.
      */
     var enableInGroups = true
 
@@ -206,6 +229,7 @@ abstract class MagicBotFork(val scope: MagicForkScope) :
      */
     init {
         initLog(this)
+        initDispatch(this)
     }
 
     /**
@@ -214,86 +238,114 @@ abstract class MagicBotFork(val scope: MagicForkScope) :
     abstract fun onMessage(message: MagicBotMessage)
 
     /**
+     * Handling overlord messages
+     */
+    open fun onOverlordMessage(message: Any) {
+
+    }
+
+    /**
      * Called after onMessage. Useful for saving state.
      */
     open fun afterMessage() {
 
     }
 
-    final override fun onReceive(p0: Any?) {
+    final override fun onReceive(message: Any?) {
 
-        val message = p0 as BotMessages.Message
-        val content = message.message()
+        if (message is OverlordMessage) {
+            onOverlordMessage(message.message)
+            return
+        }
+
         var msg: MagicBotMessage
 
-        when (content) {
+        when (message) {
         //
-        // Handling Text Message
+        // General messages
         //
-            is BotMessages.TextMessage -> {
+            is BotMessages.Message -> {
+                val content = message.message()
+                when (content) {
+                //
+                // Handling Text Message
+                //
+                    is BotMessages.TextMessage -> {
 
-                //
-                // Group message filtration
-                //
-                if (scope.peer.isGroup) {
-                    if (!enableInGroups) {
-                        return
-                    }
-                    if (onlyWithMentions) {
-                        if (ownNickname != null) {
-                            if (!content.text().contains("@$ownNickname")) {
+                        //
+                        // Group message filtration
+                        //
+                        if (scope.peer.isGroup) {
+                            if (!enableInGroups) {
                                 return
                             }
-                        } else {
+                            if (onlyWithMentions) {
+                                if (ownNickname != null) {
+                                    if (!content.text().toLowerCase().contains("@${ownNickname!!.toLowerCase()}")) {
+                                        return
+                                    }
+                                } else {
+                                    return
+                                }
+                            }
+                        }
+
+                        //
+                        // Building Text Message
+                        //
+                        val mText = MagicBotTextMessage(message.peer().toUsable(), message.sender(), message.randomId(),
+                                content.text())
+                        msg = mText
+
+                        // Setting Command parameters if needed
+                        val pMsg = ParsedMessage.matchType(content.text())
+                        if (pMsg is MessageCommand) {
+                            mText.command = pMsg.command
+                            mText.commandArgs = pMsg.data
+                        }
+                    }
+                //
+                // Handling JSON messages
+                //
+                    is BotMessages.JsonMessage -> {
+                        try {
+                            val pJson = JSONObject(content.rawJson())
+                            msg = MagicBotJsonMessage(message.peer().toUsable(), message.sender(),
+                                    message.randomId(), pJson)
+                        } catch(e: Exception) {
+                            e.printStackTrace()
                             return
                         }
                     }
-                }
-
                 //
-                // Building Text Message
+                // Handling Document Messages
                 //
-                val mText = MagicBotTextMessage(message.peer(), message.sender(), message.randomId(),
-                        content.text())
-                msg = mText
-
-                // Setting Command parameters if needed
-                val pMsg = ParsedMessage.matchType(content.text())
-                if (pMsg is MessageCommand) {
-                    mText.command = pMsg.command
-                    mText.commandArgs = pMsg.data
+                    is BotMessages.DocumentMessage -> {
+                        msg = MagicBotDocMessage(message.peer().toUsable(), message.sender(),
+                                message.randomId(), content)
+                    }
+                //
+                // Handling Sticker Messages
+                //
+                    is BotMessages.StickerMessage -> {
+                        msg = MagicBotStickerMessage(message.peer().toUsable(), message.sender(),
+                                message.randomId(), content)
+                    }
+                //
+                // Ignoring unknown message
+                //
+                    else -> {
+                        return
+                    }
                 }
             }
-        //
-        // Handling JSON messages
-        //
-            is BotMessages.JsonMessage -> {
-                try {
-                    val pJson = JSONObject(content.rawJson())
-                    msg = MagicBotJsonMessage(message.peer(), message.sender(),
-                            message.randomId(), pJson)
-                } catch(e: Exception) {
-                    e.printStackTrace()
-                    return
-                }
-            }
-        //
-        // Handling Document Messages
-        //
-            is BotMessages.DocumentMessage -> {
-                msg = MagicBotDocMessage(message.peer(), message.sender(),
-                        message.randomId(), content)
-            }
-        //
-        // Ignoring unknown message
-        //
             else -> {
                 return
             }
         }
 
-        scope.peer = msg.peer.toUsable()
-        scope.sender = getUser(msg.sender.id())
+        scope.peer = msg.peer
+        scope.sender = if (msg.sender != null) getUser(msg.sender!!.id()) else null
         onMessage(msg)
         afterMessage()
     }
@@ -304,6 +356,12 @@ abstract class MagicBotFork(val scope: MagicForkScope) :
     fun sendToOverlord(message: Any) {
         scope.overlord?.tell(message, scope.bot.self())
     }
+
+    override fun preRestart(reason: Throwable?, message: Option<Any>?) {
+        super.preRestart(reason, message)
+
+        logException(reason)
+    }
 }
 
 
@@ -313,15 +371,55 @@ abstract class MagicBotFork(val scope: MagicForkScope) :
  */
 abstract class MagicOverlord(val scope: MagicOverlordScope) :
         APITrait by APITraitImpl(scope.bot),
+        LogTrait by LogTraitImpl(),
+        BugSnag by BugSnagImpl(),
+        DispatchTrait by DispatchTraitImpl(),
         UntypedActor() {
 
+    init {
+        initLog(this)
+        initDispatch(this)
+    }
+
+    override fun preStart() {
+        super.preStart()
+
+        Thread.sleep(5000)
+
+        val state = scope.botKeyValue.getJSONValue("overlord_state")
+        if (state != null) {
+            onRestoreState(state)
+        }
+    }
+
+    open fun onRestoreState(state: JSONObject) {
+
+    }
+
+    open fun onSaveState(state: JSONObject) {
+
+    }
+
+    fun saveState() {
+        val state = JSONObject()
+        onSaveState(state)
+        scope.botKeyValue.setJSONValue("overlord_state", state)
+    }
+
     /**
-     * Called when Raw Web Hook are received
-     * @param name Web Hook name (that is specified on hook creation)
-     * @param body Hook body in bytes
-     * @param headers Headers of request
+     * Called when Web Hook are received
+     * @param hook WebHook data
      */
-    abstract fun onRawWebHookReceived(name: String, body: ByteArray, headers: JSONObject)
+    abstract fun onWebHookReceived(hook: HookData)
+
+    /**
+     * Sending message to Fork
+     * @param peer Peer for message
+     * @param message Message to send
+     */
+    fun sendToForks(peer: OutPeer, message: Any) {
+        scope.rootRef.tell(OverlordMessage(peer, message), self())
+    }
 
     override fun onReceive(update: Any?) {
         when (update) {
@@ -334,12 +432,36 @@ abstract class MagicOverlord(val scope: MagicOverlordScope) :
                         return
                     }
                     val data = resJ.getJSONObject("data")
+                    val method = data.getString("method")
+                    val queryString = data.optString("queryString")
                     val name = data.getString("name")
                     val body = Base64.getDecoder().decode(data.getString("body"))
                     val headers = data.getJSONObject("headers")
-                    onRawWebHookReceived(name, body, headers)
+
+                    var jsonBody: JSONObject? = null
+                    try {
+                        jsonBody = JSONObject(String(body))
+                    } catch(e: Exception) {
+                        // Ignore
+                    }
+
+                    onWebHookReceived(HookData(
+                            name = name,
+                            method = method,
+                            query = queryString,
+                            body = body,
+                            jsonBody = jsonBody,
+                            headers = headers))
                 }
             }
         }
     }
+
+    override fun preRestart(reason: Throwable?, message: Option<Any>?) {
+        super.preRestart(reason, message)
+
+        logException(reason)
+    }
 }
+
+data class HookData(val name: String, val method: String, val query: String, val body: ByteArray, val jsonBody: JSONObject?, val headers: JSONObject)
