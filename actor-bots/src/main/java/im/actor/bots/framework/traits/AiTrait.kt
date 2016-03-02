@@ -72,9 +72,9 @@ class AiTraitImpl : AiTrait,
     }
 
     private fun aiRequest(command: String, agent: AiAgent, request: JSONObject): JSONObject? {
-        return urlPostJson(ENDPOINT + command + "?v=20150910",
-                request, "Authorization", "Bearer ${agent.token}",
-                "ocp-apim-subscription-key", aiSubscriptionKey!!)
+        return (urlPostJson(ENDPOINT + command + "?v=20150910",
+                Json.JsonObject(request), "Authorization", "Bearer ${agent.token}",
+                "ocp-apim-subscription-key", aiSubscriptionKey!!) as? Json.JsonObject)?.json
     }
 }
 

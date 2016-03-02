@@ -8,7 +8,7 @@ import java.util.*
 
 open class NotificationBot(scope: MagicForkScope) : MagicStatefulBot(scope) {
 
-    var welcomeMessage = "Hello! I am notification bot and i can send you various notifications. " +
+    var welcomeMessage = "Hello! I am notification bots and i can send you various notifications. " +
             "Just send me /subscribe and i will start to broadcast messages to you"
 
     override fun configure() {
@@ -119,7 +119,10 @@ open class NotificationBot(scope: MagicForkScope) : MagicStatefulBot(scope) {
     }
 
     fun isSenderAdmin(): Boolean {
-        val sender = getUser(scope.sender.id())
+        if (scope.sender == null) {
+            return false
+        }
+        val sender = getUser(scope.sender!!.id())
         if (sender.username.isPresent && admins.contains(sender.username.get())) {
             return true
         }
@@ -204,11 +207,19 @@ class NotificationOverlord(scope: MagicOverlordScope) : MagicOverlord(scope) {
             val storage = JSONObject(keyValue.getStringValue("storage"))
             val peers = storage.getJSONArray("peers")
             for (i in 0..peers.length()) {
-                subscribers.add(outPeerFromJson(peers.getJSONObject(i)))
+                try {
+                    subscribers.add(outPeerFromJson(peers.getJSONObject(i)))
+                } catch(e: Exception) {
+                    e.printStackTrace()
+                }
             }
             val adminPeers = storage.getJSONArray("adminPeers")
             for (i in 0..adminPeers.length()) {
-                adminSubscribers.add(outPeerFromJson(peers.getJSONObject(i)))
+                try {
+                    adminSubscribers.add(outPeerFromJson(peers.getJSONObject(i)))
+                } catch(e: Exception) {
+                    e.printStackTrace()
+                }
             }
         } catch(e: Exception) {
             e.printStackTrace()
@@ -239,14 +250,12 @@ class NotificationOverlord(scope: MagicOverlordScope) : MagicOverlord(scope) {
         }
     }
 
-    override fun onRawWebHookReceived(name: String, body: ByteArray, headers: JSONObject) {
-        try {
-            val body = JSONObject(String(body, "UTF-8"))
-            if (body.has("text")) {
-                onText(body.getString("text"))
+    override fun onWebHookReceived(hook: HookData) {
+        if (hook.jsonBody != null) {
+            val text = hook.jsonBody.optString("text")
+            if (text != null) {
+                onText(text)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

@@ -229,4 +229,12 @@ abstract class MagicStatefulBot(scope: MagicForkScope) : MagicPersistentBot(scop
         }
         return root as ExpectCommands
     }
+
+    protected fun formSend(name: String, toSend: String): String {
+        return "[$name](send:$toSend)"
+    }
+
+    protected fun formSend(command: String): String {
+        return formSend(command, command)
+    }
 }

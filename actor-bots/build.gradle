@@ -23,7 +23,7 @@ group 'im.actor'
 version '1.0-SNAPSHOT'
 
 dependencies {
-    compile 'im.actor:actor-botkit:1.0.44'
+    compile 'im.actor:actor-botkit:1.0.67'
     compile 'im.actor:shardakka_2.11:0.1.16'
     compile 'org.iq80.leveldb:leveldb:0.7'
     compile 'org.fusesource.leveldbjni:leveldbjni-all:1.8'

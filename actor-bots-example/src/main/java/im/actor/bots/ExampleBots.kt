@@ -5,6 +5,10 @@ import im.actor.bots.framework.MagicBotMessage
 import im.actor.bots.framework.MagicBotTextMessage
 import im.actor.bots.framework.MagicForkScope
 import im.actor.bots.framework.persistence.MagicPersistentBot
+import im.actor.bots.framework.stateful.MagicStatefulBot
+import im.actor.bots.framework.stateful.isText
+import im.actor.bots.framework.stateful.oneShot
+import im.actor.bots.framework.stateful.text
 import org.json.JSONObject
 
 /**
@@ -19,6 +23,27 @@ class EchoBot(scope: MagicForkScope) : MagicBotFork(scope) {
             }
         }
     }
+}
+
+class EchoStatefulBot(scope: MagicForkScope) : MagicStatefulBot(scope) {
+    override fun configure() {
+        // Configure group behaviour
+        ownNickname = "echo"
+        enableInGroups = true
+        onlyWithMentions = false
+
+        oneShot("/start") {
+            sendText("Hi, i'm simple echo bot, send me text and i'll send it back.")
+        }
+
+        oneShot("default") {
+            if (isText) {
+                sendText(text)
+            }
+        }
+
+    }
+
 }
 
 /**

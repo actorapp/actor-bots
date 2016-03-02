@@ -16,9 +16,9 @@ import java.io.IOException
  */
 interface HTTPTrait {
     fun urlGetText(url: String, vararg headers: String): String?
-    fun urlPostJson(url: String, content: JSONObject, vararg headers: String): JSONObject?
-    fun urlGetJson(url: String, vararg headers: String): JSONObject?
-    fun urlGetJsonArray(url: String, vararg headers: String): JSONArray?
+    fun urlPostUrlEncodedText(url: String, content: String, vararg headers: String): String?
+    fun urlPostJson(url: String, content: Json, vararg headers: String): Json?
+    fun urlGetJson(url: String, vararg headers: String): Json?
 }
 
 class HTTPTraitImpl : HTTPTrait {
@@ -34,12 +34,11 @@ class HTTPTraitImpl : HTTPTrait {
             }
             val res = client!!.execute(get)
             val text = IOUtils.toString(res.entity.content)
-            if (res.statusLine.statusCode != 200) {
-                res.close()
-                return null
-            }
             res.close()
-            return text
+            if (res.statusLine.statusCode >= 200 && res.statusLine.statusCode < 300) {
+                return text
+            }
+            return null
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -47,22 +46,43 @@ class HTTPTraitImpl : HTTPTrait {
         return null
     }
 
-    override fun urlPostJson(url: String, content: JSONObject, vararg headers: String): JSONObject? {
+    override fun urlPostUrlEncodedText(url: String, content: String, vararg headers: String): String? {
         assumeHttp()
         try {
             val post = HttpPost(url)
-            for (i in 0..headers.size() / 2 - 1) {
+            for (i in 0..headers.size / 2 - 1) {
+                post.addHeader(headers[i * 2], headers[i * 2 + 1])
+            }
+            post.entity = StringEntity(content, ContentType.APPLICATION_FORM_URLENCODED)
+            val res = client!!.execute(post)
+            val text = IOUtils.toString(res.entity.content)
+            res.close()
+            if (res.statusLine.statusCode >= 200 && res.statusLine.statusCode < 300) {
+                return text
+            }
+            return null
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return null
+    }
+
+    override fun urlPostJson(url: String, content: Json, vararg headers: String): Json? {
+        assumeHttp()
+        try {
+            val post = HttpPost(url)
+            for (i in 0..headers.size / 2 - 1) {
                 post.addHeader(headers[i * 2], headers[i * 2 + 1])
             }
             post.entity = StringEntity(content.toString(), ContentType.APPLICATION_JSON)
             val res = client!!.execute(post)
-            if (res.getStatusLine().getStatusCode() != 200) {
-                res.close()
-                return null
-            }
-            val text = IOUtils.toString(res.getEntity().getContent())
+            val text = IOUtils.toString(res.entity.content)
             res.close()
-            return JSONObject(text)
+            if (res.statusLine.statusCode >= 200 && res.statusLine.statusCode < 300) {
+                return parseJson(text)
+            }
+            return null
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -70,21 +90,10 @@ class HTTPTraitImpl : HTTPTrait {
         return null
     }
 
-    override fun urlGetJson(url: String, vararg headers: String): JSONObject? {
+    override fun urlGetJson(url: String, vararg headers: String): Json? {
         val res = urlGetText(url, *headers) ?: return null
         try {
-            return JSONObject(res)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return null
-    }
-
-    override fun urlGetJsonArray(url: String, vararg headers: String): JSONArray? {
-        val res = urlGetText(url, *headers) ?: return null
-        try {
-            return JSONArray(res)
+            return parseJson(res)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -95,6 +104,35 @@ class HTTPTraitImpl : HTTPTrait {
     private fun assumeHttp() {
         if (client == null) {
             client = HttpClients.createDefault()
+        }
+    }
+}
+
+fun parseJson(text: String): Json? {
+    try {
+        return Json.JsonObject(JSONObject(text))
+    } catch(e: Exception) {
+
+    }
+    try {
+        return Json.JsonArray(JSONArray(text))
+    } catch(e: Exception) {
+
+    }
+
+    return null
+}
+
+sealed class Json {
+    class JsonObject(val json: JSONObject) : Json() {
+        override fun toString(): String {
+            return json.toString()
+        }
+    }
+
+    class JsonArray(val json: JSONArray) : Json() {
+        override fun toString(): String {
+            return json.toString()
         }
     }
 }

@@ -44,7 +44,7 @@ public class ServerKeyValue {
         if (cachedValues.containsKey(key)) {
             return cachedValues.get(key);
         }
-        BotMessages.Container<Option<String>> res = Await.result(remoteBot.requestGetValue(keySpace, key), Duration.create(10, TimeUnit.SECONDS));
+        BotMessages.Container<Option<String>> res = Await.result(remoteBot.requestGetValue(keySpace, key), Duration.create(60, TimeUnit.SECONDS));
         if (res.value().nonEmpty()) {
             String val = res.value().get();
             cachedValues.put(key, val);

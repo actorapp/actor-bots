@@ -8,6 +8,7 @@ import kotlin.reflect.KClass
 
 class BotFarm(val name: String) {
 
+    var endpoint = RemoteBot.DefaultEndpoint()
     val system = ActorSystem.create(name)
     val bots = ArrayList<BotDescription>()
 
@@ -25,7 +26,7 @@ class BotFarm(val name: String) {
 
         for (b in bots) {
             var config = MagicBotConfig(b.name!!, b.clazz.java, b.overlordClazz, b.token!!,
-                    RemoteBot.DefaultEndpoint(), b.traceHook)
+                    endpoint, b.traceHook)
             system.actorOf(Props.create(MagicalRemoteBot::class.java, config), b.name)
         }
 

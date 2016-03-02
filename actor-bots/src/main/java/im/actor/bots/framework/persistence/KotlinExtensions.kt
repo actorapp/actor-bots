@@ -1,7 +1,8 @@
 package im.actor.bots.framework.persistence
 
 import akka.util.Timeout
-import com.fasterxml.jackson.module.kotlin.*
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import shardakka.keyvalue.SimpleKeyValueJava
 import java.io.ByteArrayOutputStream
 import java.util.concurrent.TimeUnit
