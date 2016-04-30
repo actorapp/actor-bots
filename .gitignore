@@ -3,3 +3,4 @@ local.properties
 .idea
 actor-bots-example/build
 actor-bots/build
+.gradle

@@ -12,6 +12,7 @@ import im.actor.bots.framework.traits.*
 import org.json.JSONObject
 import scala.Option
 import scala.concurrent.Future
+import java.nio.charset.Charset
 import java.util.*
 
 /**
@@ -426,7 +427,7 @@ abstract class MagicOverlord(val scope: MagicOverlordScope) :
             is BotMessages.RawUpdate -> {
                 if (update.type.isPresent && update.type.get() == "HookData") {
                     val res = Base64.getDecoder().decode(update.data())
-                    val resS = String(res, "UTF-8")
+                    val resS = String(res)
                     val resJ = JSONObject(resS)
                     if (resJ.getString("dataType") != "HookData") {
                         return

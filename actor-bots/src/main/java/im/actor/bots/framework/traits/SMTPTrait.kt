@@ -1,6 +1,11 @@
 package im.actor.bots.framework.traits
 
+import com.google.protobuf.StructOrBuilder
+import org.codemonkey.simplejavamail.Email
+import org.codemonkey.simplejavamail.Mailer
+import org.codemonkey.simplejavamail.TransportStrategy
 import java.util.*
+import javax.mail.*
 
 interface SMTPTrait {
     fun sendEmail(subject: String, text: String, html: String, from: String, fromEmail: String,
