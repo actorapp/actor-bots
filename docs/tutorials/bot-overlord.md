@@ -27,7 +27,7 @@ farm("BotFarm") {
 }
 ```
 
-### Sendimg Message to Overlord
+### Sending Message to Overlord
 
 This message can be received in `onReceive` method of overlord. WARRING: Do not forget to call super class method.
 
