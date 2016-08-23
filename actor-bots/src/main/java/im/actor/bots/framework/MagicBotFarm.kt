@@ -2,13 +2,12 @@ package im.actor.bots.framework
 
 import akka.actor.ActorSystem
 import akka.actor.Props
-import im.actor.botkit.RemoteBot
 import java.util.*
 import kotlin.reflect.KClass
 
-class BotFarm(val name: String) {
+class BotFarm(val name: String, endpoint: String) {
 
-    var endpoint = RemoteBot.DefaultEndpoint()
+    var endpoint = endpoint
     val system = ActorSystem.create(name)
     val bots = ArrayList<BotDescription>()
 
@@ -41,8 +40,8 @@ class BotDescription(val clazz: KClass<MagicBotFork>) {
     var overlordClazz: Class<*>? = null
 }
 
-public fun farm(name: String, init: BotFarm.() -> Unit) {
-    val res = BotFarm(name)
+public fun farm(name: String, endpoint: String, init: BotFarm.() -> Unit) {
+    val res = BotFarm(name, endpoint)
     res.init()
     res.startFarm()
 }
