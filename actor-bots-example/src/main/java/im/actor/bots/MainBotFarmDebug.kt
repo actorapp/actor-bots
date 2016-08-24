@@ -1,9 +1,13 @@
 package im.actor.bots
 
+import im.actor.botkit.RemoteBot
 import im.actor.bots.framework.farm
 
 fun main(args: Array<String>) {
-    farm("bots") {
+
+    val endpoint = RemoteBot.DefaultEndpoint()
+
+    farm("bots", endpoint) {
 
         // Stewie
         //        bot(WunderListDebugBot::class) {
